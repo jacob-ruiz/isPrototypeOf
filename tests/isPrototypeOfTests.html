@@ -1,0 +1,47 @@
+<script src="tinytest.js"></script>
+<script src="../isPrototypeOf.js"></script>
+<script>
+
+// Setup objects we can test.
+
+// First-level prototype object.
+var canine = {
+  bark: function() {
+    console.log('bark');
+  }
+};
+
+// Second-level prototype object.
+var dog = Object.create(canine);
+dog.fetch = function() {
+  console.log('fetch');
+};
+
+// Third-level instance object.
+var myDog = Object.create(dog);
+var empty = Object.create(null);
+
+tests({
+
+  'it should return true if protoObj is the prototype for instanceObj': function() {
+    var result = isPrototypeOf(dog, myDog);
+    eq(result, true);
+  },
+
+  'it should return false if protoObj is not the prototype for instanceObj': function() {
+    var result = isPrototypeOf(dog, empty);
+    eq(result, false);
+  },
+
+  'it should return true if Object.prototype is in the prototype chain for instanceObj': function() {
+    var result = isPrototypeOf(Object.prototype, myDog);
+    eq(result, true);
+  },
+
+  'it should work for any number of prototype links': function() {
+    var result = isPrototypeOf(canine, myDog)
+    eq(result, true);
+  },
+
+});
+</script>
